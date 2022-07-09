@@ -190,12 +190,12 @@ def parse(a=None):
     parser.add_argument("--skip_video_for_run_all", help="Skip Video Creation", type=str2bool, default=gp("skip_video_for_run_all", False), required=False)
     parser.add_argument("--check_model_SHA", help="Check Model Hash", type=str2bool, default=gp("check_model_SHA", False), required=False)
     # Deprecated Symmetry args
-    parser.add_argument("--symmetry_loss", help="(Deprecated) Symmetry Loss", type=str2bool, default=gp("symmetry_loss", False), required=False)
-    parser.add_argument("--symmetry_loss_scale", help="(Deprecated) Symmetry Loss Scale", type=int, default=gp("symmetry_loss_scale", 1500), required=False)
-    parser.add_argument("--symmetry_switch", help="(Deprecated) Symmetry Switch", type=int, default=gp("symmetry_switch", 40), required=False)
-    parser.add_argument("--v_symmetry_loss", help="(Deprecated) Vertical Symmetry Loss", type=str2bool, default=gp("v_symmetry_loss", False), required=False)
-    parser.add_argument("--v_symmetry_loss_scale", help="(Deprecated) Vertical Symmetry Loss Scale", type=int, default=gp("v_symmetry_loss_scale", 1500), required=False)
-    parser.add_argument("--v_symmetry_switch", help="(Deprecated) Vertical Symmetry Switch", type=int, default=gp("v_symmetry_switch", 40), required=False)
+    # parser.add_argument("--symmetry_loss", help="(Deprecated) Symmetry Loss", type=str2bool, default=gp("symmetry_loss", False), required=False)
+    # parser.add_argument("--symmetry_loss_scale", help="(Deprecated) Symmetry Loss Scale", type=int, default=gp("symmetry_loss_scale", 1500), required=False)
+    # parser.add_argument("--symmetry_switch", help="(Deprecated) Symmetry Switch", type=int, default=gp("symmetry_switch", 40), required=False)
+    # parser.add_argument("--v_symmetry_loss", help="(Deprecated) Vertical Symmetry Loss", type=str2bool, default=gp("v_symmetry_loss", False), required=False)
+    # parser.add_argument("--v_symmetry_loss_scale", help="(Deprecated) Vertical Symmetry Loss Scale", type=int, default=gp("v_symmetry_loss_scale", 1500), required=False)
+    # parser.add_argument("--v_symmetry_switch", help="(Deprecated) Vertical Symmetry Switch", type=int, default=gp("v_symmetry_switch", 40), required=False)
     # New Symmetry args
     parser.add_argument("--use_vertical_symmetry", help="Use Vertical Symmetry", type=str2bool, default=gp("use_vertical_symmetry", False), required=False)
     parser.add_argument("--use_horizontal_symmetry", help="Use Horizontal Symmetry", type=str2bool, default=gp("use_horizontal_symmetry", False), required=False)

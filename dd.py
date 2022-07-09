@@ -475,20 +475,20 @@ def range_loss(input):
     return (input - input.clamp(-1, 1)).pow(2).mean([1, 2, 3])
 
 
-# Credit: https://colab.research.google.com/drive/10HUmA5laY1e1q7sYGg19Ys2lFM60M_T5#scrollTo=DefFns
-def symm_loss(im, lpm):
-    h = int(im.shape[3] / 2)
-    h1, h2 = im[:, :, :, :h], im[:, :, :, h:]
-    h2 = TF.hflip(h2)
-    return lpm(h1, h2)
+# # Credit: https://colab.research.google.com/drive/10HUmA5laY1e1q7sYGg19Ys2lFM60M_T5#scrollTo=DefFns
+# def symm_loss(im, lpm):
+#     h = int(im.shape[3] / 2)
+#     h1, h2 = im[:, :, :, :h], im[:, :, :, h:]
+#     h2 = TF.hflip(h2)
+#     return lpm(h1, h2)
 
 
-# Credit: aztec_man#3032 on Discord
-def v_symm_loss(im, lpm):
-    h = int(im.shape[2] / 2)
-    h1, h2 = im[:, :, :h, :], im[:, :, h:, :]
-    h2 = TF.vflip(h2)
-    return lpm(h1, h2)
+# # Credit: aztec_man#3032 on Discord
+# def v_symm_loss(im, lpm):
+#     h = int(im.shape[2] / 2)
+#     h1, h2 = im[:, :, :h, :], im[:, :, h:, :]
+#     h2 = TF.vflip(h2)
+#     return lpm(h1, h2)
 
 
 def do_3d_step(
@@ -1988,8 +1988,8 @@ def createCondFn(args, diffusion, model_stats, model, secondary_model, lpips_mod
                 target_losses = lpips_model(x_in, target)
                 loss = loss + target_losses.sum() * args.target_scale * anim_complete_perc**2
 
-            symmetry_switch = 100.0 * (1.0 - (args.symmetry_switch / args.steps))
-            v_symmetry_switch = 100.0 * (1.0 - (args.v_symmetry_switch / args.steps))
+            # symmetry_switch = 100.0 * (1.0 - (args.symmetry_switch / args.steps))
+            # v_symmetry_switch = 100.0 * (1.0 - (args.v_symmetry_switch / args.steps))
 
             # Deprecated Symmetry logic
             # if args.symmetry_loss:
@@ -2465,12 +2465,12 @@ def processBatch(pargs=None, folders=None, device=None, is_colab=False, session_
         "model_path": folders.model_path,
         "batchFolder": folders.batch_folder,
         "resume_run": pargs.resume_run,
-        "symmetry_loss": pargs.symmetry_loss,
-        "symmetry_loss_scale": pargs.symmetry_loss_scale,
-        "symmetry_switch": pargs.symmetry_switch,
-        "v_symmetry_loss": pargs.v_symmetry_loss,
-        "v_symmetry_loss_scale": pargs.v_symmetry_loss_scale,
-        "v_symmetry_switch": pargs.v_symmetry_switch,
+        # "symmetry_loss": pargs.symmetry_loss,
+        # "symmetry_loss_scale": pargs.symmetry_loss_scale,
+        # "symmetry_switch": pargs.symmetry_switch,
+        # "v_symmetry_loss": pargs.v_symmetry_loss,
+        # "v_symmetry_loss_scale": pargs.v_symmetry_loss_scale,
+        # "v_symmetry_switch": pargs.v_symmetry_switch,
         "modifiers": pargs.modifiers,
         "save_metadata": pargs.save_metadata,
         "db": pargs.db,
