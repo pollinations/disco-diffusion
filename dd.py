@@ -544,6 +544,21 @@ def do_3d_step(
     return next_step_pil
 
 
+def createSymFn(args):
+    def symmetry_transformation_fn(x):
+        if args.use_horizontal_symmetry:
+            [n, c, h, w] = x.size()
+            x = torch.concat((x[:, :, :, : w // 2], torch.flip(x[:, :, :, : w // 2], [-1])), -1)
+            logger.info("horizontal symmetry applied")
+        if args.use_vertical_symmetry:
+            [n, c, h, w] = x.size()
+            x = torch.concat((x[:, :, : h // 2, :], torch.flip(x[:, :, : h // 2, :], [-2])), -2)
+            logger.info("vertical symmetry applied")
+        return x
+
+    return symmetry_transformation_fn
+
+
 def save_settings(setting_list=None, batchFolder=None, batch_name=None, batchNum=None):
     with open(f"{batchFolder}/{batch_name}({batchNum})_settings.txt", "w+") as f:
         json.dump(pydot(sanitize(setting_list)), f, ensure_ascii=False, indent=4)
@@ -1736,6 +1751,8 @@ def disco(args, folders, frame_num, clip_models, init_scale, skip_steps, seconda
                 init_image=init,
                 randomize_class=args.randomize_class,
                 eta=args.eta,
+                transformation_fn=createSymFn(args),
+                transformation_percent=args.transformation_percent,
             )
         else:
             samples = diffusion.plms_sample_loop_progressive(
@@ -1973,18 +1990,20 @@ def createCondFn(args, diffusion, model_stats, model, secondary_model, lpips_mod
 
             symmetry_switch = 100.0 * (1.0 - (args.symmetry_switch / args.steps))
             v_symmetry_switch = 100.0 * (1.0 - (args.v_symmetry_switch / args.steps))
-            if args.symmetry_loss:
-                logger.info(f"Symmetry ends at {100-symmetry_switch}%")
-            if args.v_symmetry_loss:
-                logger.info(f"Vertical Symmetry ends at {100-v_symmetry_switch}%")
 
-            if args.symmetry_loss and np.array(t.cpu())[0] > 10 * symmetry_switch:
-                sloss = symm_loss(x_in, lpips_model)
-                loss = loss + sloss.sum() * args.symmetry_loss_scale
+            # Deprecated Symmetry logic
+            # if args.symmetry_loss:
+            #     logger.info(f"Symmetry ends at {100-symmetry_switch}%")
+            # if args.v_symmetry_loss:
+            #     logger.info(f"Vertical Symmetry ends at {100-v_symmetry_switch}%")
 
-            if args.v_symmetry_loss and np.array(t.cpu())[0] > 10 * v_symmetry_switch:
-                sloss = v_symm_loss(x_in, lpips_model)
-                loss = loss + sloss.sum() * args.v_symmetry_loss_scale
+            # if args.symmetry_loss and np.array(t.cpu())[0] > 10 * symmetry_switch:
+            #     sloss = symm_loss(x_in, lpips_model)
+            #     loss = loss + sloss.sum() * args.symmetry_loss_scale
+
+            # if args.v_symmetry_loss and np.array(t.cpu())[0] > 10 * v_symmetry_switch:
+            #     sloss = v_symm_loss(x_in, lpips_model)
+            #     loss = loss + sloss.sum() * args.v_symmetry_loss_scale
 
             x_in_grad += torch.autograd.grad(loss, x_in)[0]
             if torch.isnan(x_in_grad).any() == False:
@@ -2320,10 +2339,10 @@ def processBatch(pargs=None, folders=None, device=None, is_colab=False, session_
 
     seed = -1
 
-    if pargs.seed_type == 'incremental_seed':
+    if pargs.seed_type == "incremental_seed":
         logger.info(folders)
         logger.info(pargs.batch_name)
-        frame = len(glob(folders.batch_folder+f"/{pargs.batch_name}({batchNum})*.png"))
+        frame = len(glob(folders.batch_folder + f"/{pargs.batch_name}({batchNum})*.png"))
         seed = pargs.seed_value + int(frame)
         logger.info(f"🌱 Incremental seeding starting with seed: {seed}")
     elif pargs.seed_type == "random_seed":
@@ -2333,8 +2352,8 @@ def processBatch(pargs=None, folders=None, device=None, is_colab=False, session_
     elif pargs.seed_type == "static_seed":
         seed = int(pargs.seed_value)
         logger.info(f"🌱 Using static seed: {seed}")
-    elif pargs.set_seed == 'incremental_seed':
-        frame = len(glob(folders.batch_folder+f"/{pargs.batch_name}({batchNum})*.png"))
+    elif pargs.set_seed == "incremental_seed":
+        frame = len(glob(folders.batch_folder + f"/{pargs.batch_name}({batchNum})*.png"))
         seed = pargs.seed_value + int(frame)
         logger.info(f"🌱 Incremental seeding starting with seed: {seed}")
     elif pargs.set_seed == "random_seed":
@@ -2435,6 +2454,9 @@ def processBatch(pargs=None, folders=None, device=None, is_colab=False, session_
         "rand_mag": pargs.rand_mag,
         "turbo_mode": pargs.turbo_mode,
         "turbo_preroll": pargs.turbo_preroll,
+        "use_horizontal_symmetry": pargs.use_horizontal_symmetry,
+        "use_vertical_symmetry": pargs.use_vertical_symmetry,
+        "transformation_percent": pargs.transformation_percent,
         "turbo_steps": pargs.turbo_steps,
         "video_init_seed_continuity": pargs.video_init_seed_continuity,
         "videoFramesFolder": videoFramesFolder,
