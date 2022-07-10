@@ -5,9 +5,9 @@ from email.policy import default
 
 from cog import BasePredictor, Input, Path
 from pydotted import pydot
-from typing import List
+from typing import List, Iterator
 import os,sys,tempfile,glob
-
+import queue, threading
 
 PROJECT_DIR = os.path.abspath(os.getcwd())
 
@@ -62,7 +62,7 @@ class Predictor(BasePredictor):
         target_scale: int = Input(description="Target Scale", default=20000),
         skip_steps: int = Input(description="Skip Steps", default=10),
         seed: int = Input(description="Seed (leave empty to use a random seed)", default=None, le=(2**32-1), ge=0),
-    ) -> List[Path]:
+    ) -> Iterator[Path]:
         """Run a single prediction on the model"""        
         outdir = tempfile.mkdtemp('disco')
         self.pargs.images_out = outdir
@@ -92,8 +92,26 @@ class Predictor(BasePredictor):
         self.pargs.init_scale = init_scale
         self.pargs.target_scale = target_scale
         self.pargs.skip_steps = skip_steps
-        if seed:
+        if (seed):
             self.pargs.set_seed = seed
+                        
+        self.pargs.n_batches = 0
+        self.pargs.progress_fn = lambda img: output.put(img)
+        output = queue.SimpleQueue()
+        t = threading.Thread(target=self.worker, daemon=True)
+        ix = 0
+        t.start()
+        while t.is_alive():
+            try:
+                image = output.get(block=True, timeout=5)
+                filename = f'{tempfile.mkdtemp()}/{ix}.png'
+                outfile = open(filename, 'wb')
+                outfile.write(image)
+                yield Path(filename)
+                ix += 1
+            except: {}
 
-        dd.start_run(pargs=self.pargs, folders=self.folders, device=self.device, is_colab=False)
-        yield [Path(image) for image in glob.glob(outdir+"/*.png")]
+        yield [glob.glob(outdir+"/(0)_0.png")[0]]
+        
+    def worker(self):
+        dd.start_run(pargs=self.pargs, folders=self.folders, device=self.device, is_collab=False)
