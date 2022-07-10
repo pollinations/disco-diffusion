@@ -28,13 +28,13 @@ build:
     - wget --quiet --output-document=/root/.cache/disco-diffusion/ViT-B-16.pt https://models.nmb.ai/clip/ViT-B-16.pt
     - wget --quiet --output-document=/root/.cache/disco-diffusion/ViT-L-14.pt https://models.nmb.ai/clip/ViT-L-14.pt
     - wget --quiet --output-document=/root/.cache/disco-diffusion/ViT-L-14-336px.pt https://models.nmb.ai/clip/ViT-L-14-336px.pt
-    - wget --quiet --output-document=/root/.cache/disco-diffusion/vgg16-397923af.pth https://models.nmb.ai/disco/vgg16-397923af.pth
+    - mkdir -p /root/.cache/disco-diffusion/hub/checkpoints; wget --quiet --output-document=/root/.cache/disco-diffusion/hub/checkpoints/vgg16-397923af.pth https://models.nmb.ai/disco/vgg16-397923af.pth
     - wget --quiet --output-document=/root/.cache/disco-diffusion/256x256_openai_comics_faces_by_alex_spirin_084000.pt https://models.nmb.ai/disco/256x256_openai_comics_faces_by_alex_spirin_084000.pt
     - wget --quiet --output-document=/root/.cache/disco-diffusion/pixel_art_diffusion_hard_256.pt https://models.nmb.ai/disco/pixel_art_diffusion_hard_256.pt
     - wget --quiet --output-document=/root/.cache/disco-diffusion/pixel_art_diffusion_soft_256.pt https://models.nmb.ai/disco/pixel_art_diffusion_soft_256.pt
     - wget --quiet --output-document=/root/.cache/disco-diffusion/lsun_uncond_100M_1200K_bs128.pt https://models.nmb.ai/disco/lsun_uncond_100M_1200K_bs128.pt
     - wget --quiet --output-document=/root/.cache/disco-diffusion/vit_b_16_plus_240-laion400m_e31-8fb26589.pt https://models.nmb.ai/clip/vit_b_16_plus_240-laion400m_e31-8fb26589.pt
-
+    - wget --quiet --output-document=/root/.cache/disco-diffusion/vgg16-397923af.pth https://models.nmb.ai/disco/vgg16-397923af.pth
 # predict.py defines how predictions are run on your model
 image: "r8.im/nightmareai/disco-diffusion"
 predict: "predict.py:Predictor"

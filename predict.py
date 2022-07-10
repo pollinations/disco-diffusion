@@ -18,6 +18,7 @@ os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
 class Predictor(BasePredictor):
     def setup(self):
+        sys.argv = [sys.argv[0]]
         self.pargs = dd_args.arg_configuration_loader(pydot({"model_path": "/root/.cache/disco-diffusion"}))
         self.folders = dd.setupFolders(is_colab=False, PROJECT_DIR=PROJECT_DIR, pargs=self.pargs)
         dd.loadModels(self.folders)
@@ -25,12 +26,12 @@ class Predictor(BasePredictor):
 
     def predict(
         self,
-        steps: int = Input(description="Number of steps", default=250),
+        steps: int = Input(description="Number of steps", default=100),
         prompt: str = Input(description="Text Prompt", default="A beautiful painting of a singular lighthouse, shining its light across a tumultuous sea of blood by greg rutkowski and thomas kinkade, Trending on artstation."),
         ViTB32: bool = Input(description="Use ViTB32 model", default=True),
         ViTB16: bool = Input(description="Use ViTB16 model", default=True),
         ViTL14: bool = Input(description="Use ViTB14 model", default=False),
-        ViTL16_336: bool = Input(description="Use ViTL16_336 model", default=False),
+        ViTL14_336: bool = Input(description="Use ViTL14_336 model", default=False),
         RN50: bool = Input(description="Use RN50 model", default=True),
         RN50x4: bool = Input(description="Use RN50x4 model", default=False),
         RN50x16: bool = Input(description="Use RN50x16 model", default=False),
@@ -60,7 +61,7 @@ class Predictor(BasePredictor):
         init_scale: int = Input(description="Init Scale", default=1000),
         target_scale: int = Input(description="Target Scale", default=20000),
         skip_steps: int = Input(description="Skip Steps", default=10),
-        seed: int = Input(description="Seed (-1 will use a random seed)", default=-1),
+        seed: int = Input(description="Seed (leave empty to use a random seed)", default=None, le=(2**32-1), ge=0),
     ) -> List[Path]:
         """Run a single prediction on the model"""        
         outdir = tempfile.mkdtemp('disco')
@@ -70,7 +71,7 @@ class Predictor(BasePredictor):
         self.pargs.ViTB32=ViTB32
         self.pargs.ViTB16=ViTB16
         self.pargs.ViTL14=ViTL14
-        self.pargs.ViTL16_336=ViTL16_336
+        self.pargs.ViTL14_336=ViTL14_336
         self.pargs.RN50=RN50
         self.pargs.RN50x4=RN50x4
         self.pargs.RN50x16=RN50x16
@@ -91,8 +92,8 @@ class Predictor(BasePredictor):
         self.pargs.init_scale = init_scale
         self.pargs.target_scale = target_scale
         self.pargs.skip_steps = skip_steps
-        self.pargs.set_seed = seed
+        if seed:
+            self.pargs.set_seed = seed
 
         dd.start_run(pargs=self.pargs, folders=self.folders, device=self.device, is_colab=False)
         yield [Path(image) for image in glob.glob(outdir+"/*.png")]
-        
