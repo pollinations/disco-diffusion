@@ -475,20 +475,20 @@ def range_loss(input):
     return (input - input.clamp(-1, 1)).pow(2).mean([1, 2, 3])
 
 
-# Credit: https://colab.research.google.com/drive/10HUmA5laY1e1q7sYGg19Ys2lFM60M_T5#scrollTo=DefFns
-def symm_loss(im, lpm):
-    h = int(im.shape[3] / 2)
-    h1, h2 = im[:, :, :, :h], im[:, :, :, h:]
-    h2 = TF.hflip(h2)
-    return lpm(h1, h2)
+# # Credit: https://colab.research.google.com/drive/10HUmA5laY1e1q7sYGg19Ys2lFM60M_T5#scrollTo=DefFns
+# def symm_loss(im, lpm):
+#     h = int(im.shape[3] / 2)
+#     h1, h2 = im[:, :, :, :h], im[:, :, :, h:]
+#     h2 = TF.hflip(h2)
+#     return lpm(h1, h2)
 
 
-# Credit: aztec_man#3032 on Discord
-def v_symm_loss(im, lpm):
-    h = int(im.shape[2] / 2)
-    h1, h2 = im[:, :, :h, :], im[:, :, h:, :]
-    h2 = TF.vflip(h2)
-    return lpm(h1, h2)
+# # Credit: aztec_man#3032 on Discord
+# def v_symm_loss(im, lpm):
+#     h = int(im.shape[2] / 2)
+#     h1, h2 = im[:, :, :h, :], im[:, :, h:, :]
+#     h2 = TF.vflip(h2)
+#     return lpm(h1, h2)
 
 
 def do_3d_step(
@@ -542,6 +542,21 @@ def do_3d_step(
         midas_weight=args.midas_weight,
     )
     return next_step_pil
+
+
+def createSymFn(args):
+    def symmetry_transformation_fn(x):
+        if args.use_horizontal_symmetry:
+            [n, c, h, w] = x.size()
+            x = torch.concat((x[:, :, :, : w // 2], torch.flip(x[:, :, :, : w // 2], [-1])), -1)
+            logger.info("horizontal symmetry applied")
+        if args.use_vertical_symmetry:
+            [n, c, h, w] = x.size()
+            x = torch.concat((x[:, :, : h // 2, :], torch.flip(x[:, :, : h // 2, :], [-2])), -2)
+            logger.info("vertical symmetry applied")
+        return x
+
+    return symmetry_transformation_fn
 
 
 def save_settings(setting_list=None, batchFolder=None, batch_name=None, batchNum=None):
@@ -1736,6 +1751,8 @@ def disco(args, folders, frame_num, clip_models, init_scale, skip_steps, seconda
                 init_image=init,
                 randomize_class=args.randomize_class,
                 eta=args.eta,
+                transformation_fn=createSymFn(args),
+                transformation_percent=args.transformation_percent,
             )
         else:
             samples = diffusion.plms_sample_loop_progressive(
@@ -1973,20 +1990,22 @@ def createCondFn(args, diffusion, model_stats, model, secondary_model, lpips_mod
                 target_losses = lpips_model(x_in, target)
                 loss = loss + target_losses.sum() * args.target_scale * anim_complete_perc**2
 
-            symmetry_switch = 100.0 * (1.0 - (args.symmetry_switch / args.steps))
-            v_symmetry_switch = 100.0 * (1.0 - (args.v_symmetry_switch / args.steps))
-            if args.symmetry_loss:
-                logger.info(f"Symmetry ends at {100-symmetry_switch}%")
-            if args.v_symmetry_loss:
-                logger.info(f"Vertical Symmetry ends at {100-v_symmetry_switch}%")
+            # symmetry_switch = 100.0 * (1.0 - (args.symmetry_switch / args.steps))
+            # v_symmetry_switch = 100.0 * (1.0 - (args.v_symmetry_switch / args.steps))
 
-            if args.symmetry_loss and np.array(t.cpu())[0] > 10 * symmetry_switch:
-                sloss = symm_loss(x_in, lpips_model)
-                loss = loss + sloss.sum() * args.symmetry_loss_scale
+            # Deprecated Symmetry logic
+            # if args.symmetry_loss:
+            #     logger.info(f"Symmetry ends at {100-symmetry_switch}%")
+            # if args.v_symmetry_loss:
+            #     logger.info(f"Vertical Symmetry ends at {100-v_symmetry_switch}%")
 
-            if args.v_symmetry_loss and np.array(t.cpu())[0] > 10 * v_symmetry_switch:
-                sloss = v_symm_loss(x_in, lpips_model)
-                loss = loss + sloss.sum() * args.v_symmetry_loss_scale
+            # if args.symmetry_loss and np.array(t.cpu())[0] > 10 * symmetry_switch:
+            #     sloss = symm_loss(x_in, lpips_model)
+            #     loss = loss + sloss.sum() * args.symmetry_loss_scale
+
+            # if args.v_symmetry_loss and np.array(t.cpu())[0] > 10 * v_symmetry_switch:
+            #     sloss = v_symm_loss(x_in, lpips_model)
+            #     loss = loss + sloss.sum() * args.v_symmetry_loss_scale
 
             x_in_grad += torch.autograd.grad(loss, x_in)[0]
             if torch.isnan(x_in_grad).any() == False:
@@ -2321,7 +2340,25 @@ def processBatch(pargs=None, folders=None, device=None, is_colab=False, session_
             batchNum += 1
 
     seed = -1
-    if pargs.set_seed == "random_seed":
+
+    if pargs.seed_type == "incremental_seed":
+        logger.info(folders)
+        logger.info(pargs.batch_name)
+        frame = len(glob(folders.batch_folder + f"/{pargs.batch_name}({batchNum})*.png"))
+        seed = pargs.seed_value + int(frame)
+        logger.info(f"🌱 Incremental seeding starting with seed: {seed}")
+    elif pargs.seed_type == "random_seed":
+        random.seed()
+        seed = random.randint(0, 2**32)
+        logger.info(f"🌱 Randomly using seed: {seed}")
+    elif pargs.seed_type == "static_seed":
+        seed = int(pargs.seed_value)
+        logger.info(f"🌱 Using static seed: {seed}")
+    elif pargs.set_seed == "incremental_seed":
+        frame = len(glob(folders.batch_folder + f"/{pargs.batch_name}({batchNum})*.png"))
+        seed = pargs.seed_value + int(frame)
+        logger.info(f"🌱 Incremental seeding starting with seed: {seed}")
+    elif pargs.set_seed == "random_seed":
         random.seed()
         seed = random.randint(0, 2**32)
         logger.info(f"🌱 Randomly using seed: {seed}")
@@ -2419,6 +2456,9 @@ def processBatch(pargs=None, folders=None, device=None, is_colab=False, session_
         "rand_mag": pargs.rand_mag,
         "turbo_mode": pargs.turbo_mode,
         "turbo_preroll": pargs.turbo_preroll,
+        "use_horizontal_symmetry": pargs.use_horizontal_symmetry,
+        "use_vertical_symmetry": pargs.use_vertical_symmetry,
+        "transformation_percent": pargs.transformation_percent,
         "turbo_steps": pargs.turbo_steps,
         "video_init_seed_continuity": pargs.video_init_seed_continuity,
         "videoFramesFolder": videoFramesFolder,
@@ -2427,12 +2467,12 @@ def processBatch(pargs=None, folders=None, device=None, is_colab=False, session_
         "model_path": folders.model_path,
         "batchFolder": folders.batch_folder,
         "resume_run": pargs.resume_run,
-        "symmetry_loss": pargs.symmetry_loss,
-        "symmetry_loss_scale": pargs.symmetry_loss_scale,
-        "symmetry_switch": pargs.symmetry_switch,
-        "v_symmetry_loss": pargs.v_symmetry_loss,
-        "v_symmetry_loss_scale": pargs.v_symmetry_loss_scale,
-        "v_symmetry_switch": pargs.v_symmetry_switch,
+        # "symmetry_loss": pargs.symmetry_loss,
+        # "symmetry_loss_scale": pargs.symmetry_loss_scale,
+        # "symmetry_switch": pargs.symmetry_switch,
+        # "v_symmetry_loss": pargs.v_symmetry_loss,
+        # "v_symmetry_loss_scale": pargs.v_symmetry_loss_scale,
+        # "v_symmetry_switch": pargs.v_symmetry_switch,
         "modifiers": pargs.modifiers,
         "save_metadata": pargs.save_metadata,
         "db": pargs.db,

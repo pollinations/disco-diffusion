@@ -12,6 +12,9 @@
 
 
 ## Changes/Enhancements
+- **July 9, 2022**
+  - Catch up some DD 5.3 features from alembics
+  - Horizontal and Vertical symmetry functionality by nshepperd. Symmetry transformation_steps by huemin (https://twitter.com/huemin_art). Symmetry integration into Disco Diffusion by Dmitrii Tochilkin (https://twitter.com/cut_pow)
 - **May 28, 2022**
   - Turbo Mode after frame 10 fixed.  (https://github.com/entmike/disco-diffusion-1/issues/8)
 - **May 20, 2022**

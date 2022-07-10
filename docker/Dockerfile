@@ -1,4 +1,5 @@
-FROM pytorch/pytorch
+ARG base_image
+FROM ${base_image} as base
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
@@ -15,6 +16,8 @@ RUN apt-get update --yes && \
     apt-get upgrade --yes && \
     apt install --yes --no-install-recommends\
     wget\
+    curl\
+    net-tools\
     bash\
     git\
     make\
@@ -25,6 +28,7 @@ RUN apt-get update --yes && \
     imagemagick\
     ffmpeg\
     zip\
+    sudo\
     unzip\
     openssh-server &&\
     apt-get clean && rm -rf /var/lib/apt/lists/* && \
@@ -34,26 +38,46 @@ RUN apt-get update --yes && \
 RUN chmod a+rw /workspace
 
 # Create a disco user
-RUN useradd -ms /bin/bash disco
+RUN useradd -ms /bin/bash disco -p disco && adduser disco sudo
+RUN echo "disco ALL=(ALL:ALL) NOPASSWD: ALL" > /etc/sudoers.d/disco
+
 USER disco
-
+# Run this first since it's slow
+RUN pip install git+https://github.com/facebookresearch/pytorch3d.git@stable
+# Install the rest of the pips this way since they aren't slow and can be changed easier
 ADD docker-requirements.txt docker-requirements.txt
-
 RUN pip install -r docker-requirements.txt
 
 ENV TORCH_HOME=/workspace/disco-diffusion-1/models
 ADD welcome-banner.txt /home/disco/welcome-banner.txt
 ARG REPO=https://github.com/entmike/disco-diffusion-1.git
 ARG BRANCH=main
-ARG DD_VERSION=2.3
-RUN echo 'cat ~/welcome-banner.txt' >> ~/.bashrc
+ARG DD_VERSION=2.3.3
+ENV DD_VERSION=${DD_VERSION}
+RUN echo 'cat ~/welcome-banner.txt && echo ${DD_VERSION}' >> ~/.bashrc 
 RUN git clone --single-branch --branch $BRANCH $REPO
 WORKDIR /workspace/disco-diffusion-1
 RUN pip install jupyterlab
+
+# model_path based on whether models are predownloaded
+ARG model_path
+ENV TORCH_HOME=${model_path}
+ENV mp=${model_path}
+
+# Disco ENV vars are all string literals for strings becase they are JSON parsed because reasons
+ENV model_path="\""${model_path}"\""
 RUN echo 'export PATH="$HOME/.local/bin:$HOME/.local/bin/jupyter-lab:$PATH"' >> ~/.bashrc
+
+# Install JupyterLab for root but I don't know why anymore.
 USER root
 RUN pip install jupyterlab
 RUN echo 'export PATH="$HOME/.local/bin:$HOME/.local/bin/jupyter-lab:$PATH"' >> ~/.bashrc
+
+# Change ownership of model folder to disco user
+ENV model_path=${model_path}
+RUN chown disco $(echo $model_path | tr -d '"')
+
 USER disco
 ADD start.sh /start.sh
+RUN mkdir -p ${mp}/hub/checkpoints/ && cp ${mp}/vgg16-397923af.pth ${mp}/hub/checkpoints/vgg16-397923af.pth || true
 CMD [ "/start.sh" ]

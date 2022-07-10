@@ -71,7 +71,7 @@ def bot_loop(args, folders, frame_num, clip_models, init_scale, skip_steps, seco
             if args.ViTB32 and args.ViTB16 and args.RN50x64 and args.ViTL14_336:
                 my_model = "ludicrous"
 
-            results = requests.post(url, data={"idle_time": idle_time, "model": my_model}).json()
+            results = requests.post(url, data={"bot_version": 2.0, "idle_time": idle_time, "model": my_model}).json()
             if results["success"]:
                 idle_time = 0
                 connected = True
@@ -127,7 +127,7 @@ def bot_loop(args, folders, frame_num, clip_models, init_scale, skip_steps, seco
                 except:
                     symmetry = "no"
                 try:
-                    symmetry_loss_scale = results["details"]["symmetry_loss_scale"]
+                    symmetry_loss_scale = int(results["details"]["symmetry_loss_scale"])
                 except:
                     symmetry_loss_scale = 1500
 
@@ -181,6 +181,8 @@ def bot_loop(args, folders, frame_num, clip_models, init_scale, skip_steps, seco
                         w_h = [512, 512]
                     if shape == "pano":
                         w_h = [1024, 256]
+                    if shape == "skyscraper":
+                        w_h = [256, 1024]
                     if shape == "tiny-square":
                         w_h = [256, 256]
                 else:
@@ -192,6 +194,8 @@ def bot_loop(args, folders, frame_num, clip_models, init_scale, skip_steps, seco
                         w_h = [1024, 1024]
                     if shape == "pano":
                         w_h = [2048, 512]
+                    if shape == "skyscraper":
+                        w_h = [512, 2048]
                     if shape == "tiny-square":
                         w_h = [512, 512]
 
