@@ -179,7 +179,7 @@ def loadModels(folders=pydot({"model_path": "models"})):
 
 
 def main():
-    loadModels(pydot({"model_path": "models"}))
+    loadModels(pydot({"model_path": "/mnt/d/disco-models"}))
 
 
 if __name__ == "__main__":

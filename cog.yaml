@@ -1,0 +1,40 @@
+build:
+  gpu: true
+
+  system_packages:
+    - "ffmpeg"
+    - "libsm6"
+    - "libxext6"
+    - "libglib2.0-0"
+
+  # python version in the form '3.8' or '3.8.12'
+  python_version: "3.8"
+  python_requirements: "requirements.txt"
+
+  run:
+    - pip install git+https://github.com/facebookresearch/pytorch3d.git@stable
+    - mkdir -p /root/.cache/disco-diffusion
+    - wget --quiet --output-document=/root/.cache/disco-diffusion/dpt_large-midas-2f21e586.pt https://models.nmb.ai/disco/dpt_large-midas-2f21e586.pt
+    - wget --quiet --output-document=/root/.cache/disco-diffusion/512x512_diffusion_uncond_finetune_008100.pt https://models.nmb.ai/disco/512x512_diffusion_uncond_finetune_008100.pt
+    - wget --quiet --output-document=/root/.cache/disco-diffusion/256x256_diffusion_uncond.pt https://models.nmb.ai/disco/256x256_diffusion_uncond.pt
+    - wget --quiet --output-document=/root/.cache/disco-diffusion/secondary_model_imagenet_2.pth https://models.nmb.ai/disco/secondary_model_imagenet_2.pth
+    - wget --quiet --output-document=/root/.cache/disco-diffusion/AdaBins_nyu.pt https://models.nmb.ai/disco/AdaBins_nyu.pt
+    - wget --quiet --output-document=/root/.cache/disco-diffusion/RN50.pt https://models.nmb.ai/clip/RN50.pt
+    - wget --quiet --output-document=/root/.cache/disco-diffusion/RN101.pt https://models.nmb.ai/clip/RN101.pt
+    - wget --quiet --output-document=/root/.cache/disco-diffusion/RN50x4.pt https://models.nmb.ai/clip/RN50x4.pt
+    - wget --quiet --output-document=/root/.cache/disco-diffusion/RN50x16.pt https://models.nmb.ai/clip/RN50x16.pt
+    - wget --quiet --output-document=/root/.cache/disco-diffusion/RN50x64.pt https://models.nmb.ai/clip/RN50x64.pt
+    - wget --quiet --output-document=/root/.cache/disco-diffusion/ViT-B-32.pt https://models.nmb.ai/clip/ViT-B-32.pt
+    - wget --quiet --output-document=/root/.cache/disco-diffusion/ViT-B-16.pt https://models.nmb.ai/clip/ViT-B-16.pt
+    - wget --quiet --output-document=/root/.cache/disco-diffusion/ViT-L-14.pt https://models.nmb.ai/clip/ViT-L-14.pt
+    - wget --quiet --output-document=/root/.cache/disco-diffusion/ViT-L-14-336px.pt https://models.nmb.ai/clip/ViT-L-14-336px.pt
+    - mkdir -p /root/.cache/disco-diffusion/hub/checkpoints; wget --quiet --output-document=/root/.cache/disco-diffusion/hub/checkpoints/vgg16-397923af.pth https://models.nmb.ai/disco/vgg16-397923af.pth
+    - wget --quiet --output-document=/root/.cache/disco-diffusion/256x256_openai_comics_faces_by_alex_spirin_084000.pt https://models.nmb.ai/disco/256x256_openai_comics_faces_by_alex_spirin_084000.pt
+    - wget --quiet --output-document=/root/.cache/disco-diffusion/pixel_art_diffusion_hard_256.pt https://models.nmb.ai/disco/pixel_art_diffusion_hard_256.pt
+    - wget --quiet --output-document=/root/.cache/disco-diffusion/pixel_art_diffusion_soft_256.pt https://models.nmb.ai/disco/pixel_art_diffusion_soft_256.pt
+    - wget --quiet --output-document=/root/.cache/disco-diffusion/lsun_uncond_100M_1200K_bs128.pt https://models.nmb.ai/disco/lsun_uncond_100M_1200K_bs128.pt
+    - wget --quiet --output-document=/root/.cache/disco-diffusion/vit_b_16_plus_240-laion400m_e31-8fb26589.pt https://models.nmb.ai/clip/vit_b_16_plus_240-laion400m_e31-8fb26589.pt
+    - wget --quiet --output-document=/root/.cache/disco-diffusion/vgg16-397923af.pth https://models.nmb.ai/disco/vgg16-397923af.pth
+# predict.py defines how predictions are run on your model
+image: "r8.im/nightmareai/disco-diffusion"
+predict: "predict.py:Predictor"

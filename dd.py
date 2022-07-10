@@ -1805,6 +1805,8 @@ def disco(args, folders, frame_num, clip_models, init_scale, skip_steps, seconda
                             image.save(f"{args.batchFolder}/progress.png")
                             if args.dd_bot:
                                 dd_bot.upload_progress(preview_url, args)
+                            elif args.progress_fn:
+                                args.progress_fn(args)
                             # prints output on console.
                             if is_in_notebook():
                                 display.clear_output(wait=True)
