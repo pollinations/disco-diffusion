@@ -16,6 +16,11 @@ def loadModels2(folders=pydot({"model_path": "models"})):
 
     models_config = [
         {
+            "file": f"{folders.model_path}/ukiyoe_diffusion_256_022000.pt",
+            "hash": "b0b9626fbc6c43ea7eb074134612381a794c5407abb4debc8ba6ccb37386e769",
+            "sources": [{"url": "https://huggingface.co/thegenerativegeneration/ukiyoe-diffusion-256/resolve/main/ukiyoe_diffusion_256_022000.pt"}],
+        },
+        {
             "file": f"{folders.model_path}/PADexpanded.pt",
             "hash": "a73b40556634034bf43b5a716b531b46fb1ab890634d854f5bcbbef56838739a",
             "sources": [{"url": "https://huggingface.co/KaliYuga/PADexpanded/resolve/main/PADexpanded.pt"}],
@@ -39,11 +44,6 @@ def loadModels2(folders=pydot({"model_path": "models"})):
             "file": f"{folders.model_path}/PulpSciFiDiffusion.pt",
             "hash": "b79e62613b9f50b8a3173e5f61f0320c7dbb16efad42a92ec94d014f6e17337f",
             "sources": [{"url": "https://huggingface.co/KaliYuga/PulpSciFiDiffusion/resolve/main/PulpSciFiDiffusion.pt"}],
-        },
-        {
-            "file": f"{folders.model_path}/ukiyoe_diffusion_256_022000.pt",
-            "hash": "b0b9626fbc6c43ea7eb074134612381a794c5407abb4debc8ba6ccb37386e769",
-            "sources": [{"url": "https://huggingface.co/thegenerativegeneration/ukiyoe-diffusion-256/resolve/main/ukiyoe_diffusion_256_022000.pt"}],
         },
         {
             "file": f"{folders.model_path}/liminal_diffusion.pt",
