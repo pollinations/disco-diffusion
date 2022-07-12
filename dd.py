@@ -1113,6 +1113,7 @@ def prepModels(args=None):
     # Credit https://github.com/KaliYuga-ai/Pixel-Art-Diffusion/blob/e037fd58e2aef58f28d7511ea6dcb184e898e39f/Pixel_Art_Diffusion_v1_0.ipynb
     # Credit https://huggingface.co/spaces/Gradio-Blocks/clip-guided-faces/blob/main/app.py
     # Credit https://huggingface.co/thegenerativegeneration/ukiyoe-diffusion-256/tree/main
+    # Credit https://colab.research.google.com/drive/11Bs4wCs9R84DVAwDb3MkvDAd8V_Mw1e6?usp=sharing
     if args.diffusion_model in [
         "pixel_art_diffusion_soft_256",
         "pixel_art_diffusion_hard_256",
