@@ -41,9 +41,9 @@ def loadModels2(folders=pydot({"model_path": "models"})):
             "sources": [{"url": "https://huggingface.co/KaliYuga/PulpSciFiDiffusion/resolve/main/PulpSciFiDiffusion.pt"}],
         },
         {
-            "file": f"{folders.model_path}/ukiyoe_diffusion_256.pt",
+            "file": f"{folders.model_path}/ukiyoe_diffusion_256_022000.pt",
             "hash": "b0b9626fbc6c43ea7eb074134612381a794c5407abb4debc8ba6ccb37386e769",
-            "sources": [{"url": "https://huggingface.co/thegenerativegeneration/ukiyoe-diffusion-256/resolve/main/ukiyoe_diffusion_256.pt"}],
+            "sources": [{"url": "https://huggingface.co/thegenerativegeneration/ukiyoe-diffusion-256/resolve/main/ukiyoe_diffusion_256_022000.pt"}],
         },
         {
             "file": f"{folders.model_path}/liminal_diffusion.pt",
