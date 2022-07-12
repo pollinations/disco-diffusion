@@ -67,6 +67,7 @@ from ipywidgets import Output
 import argparse
 import dd_bot
 
+progress_fn = None
 
 def free_mem(cuda_device):
     logger.info(f"Clearing CUDA cache on {cuda_device}...")
@@ -1846,11 +1847,12 @@ def disco(args, folders, frame_num, clip_models, init_scale, skip_steps, seconda
                         image = TF.to_pil_image(image.add(1).div(2).clamp(0, 1))
                         if j % args.display_rate == 0 or cur_t == -1:
                             # image.save('progress.png')
-                            image.save(f"{args.batchFolder}/progress.png")
+                            progress_filename = f"{args.batchFolder}/progress.png"
+                            image.save(progress_filename)
                             if args.dd_bot:
                                 dd_bot.upload_progress(preview_url, args)
-                            elif args.progress_fn:
-                                args.progress_fn(args)
+                            elif progress_fn:
+                                progress_fn(progress_filename)
                             # prints output on console.
                             if is_in_notebook():
                                 display.clear_output(wait=True)
