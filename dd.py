@@ -1471,7 +1471,8 @@ def do_run(args=None, device=None, is_colab=False, batchNum=None, folders=None):
                 disco(args, folders, frame_num, clip_models, init_scale, skip_steps, secondary_model, lpips_model, midas_model, midas_transform, device)
             else:
                 ## Discord Bot Mode
-                dd_bot.bot_loop(args, folders, frame_num, clip_models, init_scale, skip_steps, secondary_model, lpips_model, midas_model, midas_transform, device)
+                results = dd_bot.bot_loop(args, folders, frame_num, clip_models, init_scale, skip_steps, secondary_model, lpips_model, midas_model, midas_transform, device)
+                logger.info(results)
     except:
         tb = traceback.format_exc()
         logger.error(tb)
@@ -1553,6 +1554,7 @@ def disco(args, folders, frame_num, clip_models, init_scale, skip_steps, seconda
     if args.dd_bot:
         progress_url = f"{args.dd_bot_url}/progress/{args.dd_bot_agentname}/{args.batch_name}"
         preview_url = f"{args.dd_bot_url}/preview/{args.dd_bot_agentname}/{args.batch_name}"
+        instructions_url = f"{args.dd_bot_url}/instructions/{args.dd_bot_agentname}"
         logger.info(f"Discord Bot mode enabled: {progress_url}")
 
     if args.seed is not None:
@@ -1779,8 +1781,13 @@ def disco(args, folders, frame_num, clip_models, init_scale, skip_steps, seconda
             elif j in args.intermediate_saves:
                 intermediateStep = True
             percent = math.ceil(j / total_steps * 100)
+
+            ## 🤖 BOT STUFF 🤖
             if args.dd_bot:
                 prev_ts = dd_bot.update_progress(progress_url, percent, device, prev_ts)
+                instructions = dd_bot.get_instructions(instructions_url, args)
+            ## 🤖 END OF BOT STUFF 🤖
+
             with image_display:
                 if j % args.display_rate == 0 or cur_t == -1 or intermediateStep == True:
                     for k, image in enumerate(sample["pred_xstart"]):
