@@ -35,6 +35,26 @@ build:
     - wget --quiet --output-document=/root/.cache/disco-diffusion/lsun_uncond_100M_1200K_bs128.pt https://models.nmb.ai/disco/lsun_uncond_100M_1200K_bs128.pt
     - wget --quiet --output-document=/root/.cache/disco-diffusion/vit_b_16_plus_240-laion400m_e31-8fb26589.pt https://models.nmb.ai/clip/vit_b_16_plus_240-laion400m_e31-8fb26589.pt
     - wget --quiet --output-document=/root/.cache/disco-diffusion/vgg16-397923af.pth https://models.nmb.ai/disco/vgg16-397923af.pth
+    - wget --quiet --output-document=/root/.cache/disco-diffusion/ukiyoe_diffusion_256_022000.pt https://models.nmb.ai/disco/ukiyoe_diffusion_256_022000.pt
+    - wget --quiet --output-document=/root/.cache/disco-diffusion/PADexpanded.pt https://models.nmb.ai/disco/PADexpanded.pt
+    - wget --quiet --output-document=/root/.cache/disco-diffusion/pixelartdiffusion4k.pt https://models.nmb.ai/disco/pixelartdiffusion4k.pt
+    - wget --quiet --output-document=/root/.cache/disco-diffusion/watercolordiffusion.pt https://models.nmb.ai/disco/watercolordiffusion.pt
+    - wget --quiet --output-document=/root/.cache/disco-diffusion/watercolordiffusion_2.pt https://models.nmb.ai/disco/watercolordiffusion_2.pt
+    - wget --quiet --output-document=/root/.cache/disco-diffusion/PulpSciFiDiffusion.pt https://models.nmb.ai/disco/PulpSciFiDiffusion.pt
+    - wget --quiet --output-document=/root/.cache/disco-diffusion/liminal_diffusion.pt https://models.nmb.ai/disco/liminal_diffusion.pt
+    - wget --quiet --output-document=/root/.cache/disco-diffusion/rn50-quickgelu-yfcc15m-455df137.pt https://models.nmb.ai/clip/rn50-quickgelu-yfcc15m-455df137.pt
+    - wget --quiet --output-document=/root/.cache/disco-diffusion/rn50-quickgelu-cc12m-f000538c.pt https://models.nmb.ai/clip/rn50-quickgelu-cc12m-f000538c.pt
+    - wget --quiet --output-document=/root/.cache/disco-diffusion/rn101-quickgelu-yfcc15m-3e04b30e.pt https://models.nmb.ai/clip/rn101-quickgelu-yfcc15m-3e04b30e.pt
+    - wget --quiet --output-document=/root/.cache/disco-diffusion/vit_b_32-laion2b_e16-af8dbd0c.pth https://models.nmb.ai/clip/vit_b_32-laion2b_e16-af8dbd0c.pth
+    - wget --quiet --output-document=/root/.cache/disco-diffusion/vit_b_32-quickgelu-laion400m_e31-d867053b.pt https://models.nmb.ai/clip/vit_b_32-quickgelu-laion400m_e31-d867053b.pt
+    - wget --quiet --output-document=/root/.cache/disco-diffusion/vit_b_32-quickgelu-laion400m_e32-46683a32.pt https://models.nmb.ai/clip/vit_b_32-quickgelu-laion400m_e32-46683a32.pt
+    - wget --quiet --output-document=/root/.cache/disco-diffusion/vit_b_16-laion400m_e31-00efa78f.pt https://models.nmb.ai/clip/vit_b_16-laion400m_e31-00efa78f.pt
+    - wget --quiet --output-document=/root/.cache/disco-diffusion/vit_b_16-laion400m_e32-55e67d44.pt https://models.nmb.ai/clip/vit_b_16-laion400m_e32-55e67d44.pt
+    - wget --quiet --output-document=/root/.cache/disco-diffusion/vit_b_16_plus_240-laion400m_e31-8fb26589.pt https://models.nmb.ai/clip/vit_b_16_plus_240-laion400m_e31-8fb26589.pt
+    - wget --quiet --output-document=/root/.cache/disco-diffusion/vit_b_16_plus_240-laion400m_e32-699c4b84.pt https://models.nmb.ai/clip/vit_b_16_plus_240-laion400m_e32-699c4b84.pt
+    - wget --quiet --output-document=/root/.cache/disco-diffusion/vit_l_14-laion400m_e31-69988bb6.pt https://models.nmb.ai/clip/vit_l_14-laion400m_e31-69988bb6.pt
+    - wget --quiet --output-document=/root/.cache/disco-diffusion/vit_l_14-laion400m_e32-3d133497.pt https://models.nmb.ai/clip/vit_l_14-laion400m_e32-3d133497.pt
+    
 # predict.py defines how predictions are run on your model
 image: "r8.im/nightmareai/disco-diffusion"
 predict: "predict.py:Predictor"

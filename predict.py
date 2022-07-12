@@ -35,9 +35,16 @@ class Predictor(BasePredictor):
             "256x256_diffusion_uncond",
             "pixel_art_diffusion_hard_256",
             "pixel_art_diffusion_soft_256",
+            "pixelartdiffusion_expanded",
+            "pixelartdiffusion4k",
+            "PADexpanded",
+            "watercolordiffusion",
+            "watercolordiffusion_2",
+            "PulpSciFiDiffusion",
             "256x256_openai_comics_faces_by_alex_spirin_084000",
             "lsun_uncond_100M_1200K_bs128",
-            # "vit_b_16_plus_240-laion400m_e31-8fb26589",
+            "ukiyoe_diffusion_256_022000.pt",
+            "liminal_diffusion",
         ]),
         diffusion_sampling_mode: str = Input(description="Diffusion Sampling Mode", default="ddim", choices=["plms", "ddim"]),
         ViTB32: bool = Input(description="Use ViTB32 model", default=True),
@@ -50,6 +57,19 @@ class Predictor(BasePredictor):
         RN50x64: bool = Input(description="Use RN50x64 model", default=False),
         RN50x101: bool = Input(description="Use RN50x101 model", default=False),
         RN101: bool = Input(description="Use RN101 model", default=False),
+        ViTB32_laion2b_e16: bool = Input(description="Use ViTB32_laion2b_e16 model", default=False),
+        ViTB32_laion400m_e31: bool = Input(description="Use ViTB32_laion400m_e31 model", default=False),
+        ViTB32_laion400m_e32: bool = Input(description="Use ViTB32_laion400m_e32 model", default=False),
+        ViTB32quickgelu_laion400m_e31: bool = Input(description="Use ViTB32quickgelu_laion400m_e31 model", default=False),
+        ViTB32quickgelu_laion400m_e32: bool = Input(description="Use ViTB32quickgelu_laion400m_e32 model", default=False),
+        ViTB16_laion400m_e31:bool = Input(description="Use ViTB16_laion400m_e31 model", default=False),
+        ViTB16_laion400m_e32:bool = Input(description="Use ViTB16_laion400m_e32 model", default=False),
+        RN50_yffcc15m:bool = Input(description="Use RN50_yffcc15m model", default=False),
+        RN50_cc12m:bool = Input(description="Use RN50_cc12m model", default=False),
+        RN50_quickgelu_yfcc15m:bool = Input(description="Use RN50_quickgelu_yfcc15m model", default=False),
+        RN50_quickgelu_cc12m:bool = Input(description="Use RN50_quickgelu_cc12m model", default=False),
+        RN101_yfcc15m:bool = Input(description="Use RN101_yfcc15m model", default=False),
+        RN101_quickgelu_yfcc15m:bool = Input(description="Use RN101_quickgelu_yfcc15m model", default=False),
         use_secondary_model: bool = Input(description="Use secondary model", default=True),        
         clip_guidance_scale: int = Input(description="CLIP Guidance Scale", default=5000),
         tv_scale: int = Input(description="TV Scale", default=0),
@@ -78,6 +98,19 @@ class Predictor(BasePredictor):
         self.pargs.RN50x64=RN50x64
         self.pargs.RN50x101=RN50x101
         self.pargs.RN101=RN101
+        self.pargs.ViTB32_laion2b_e16=ViTB32_laion2b_e16
+        self.pargs.ViTB32_laion400m_e31=ViTB32_laion400m_e31
+        self.pargs.ViTB32_laion400m_e32=ViTB32_laion400m_e32
+        self.pargs.ViTB32quickgelu_laion400m_e31=ViTB32quickgelu_laion400m_e31
+        self.pargs.ViTB32quickgelu_laion400m_e32=ViTB32quickgelu_laion400m_e32
+        self.pargs.ViTB16_laion400m_e31=ViTB16_laion400m_e31
+        self.pargs.ViTB16_laion400m_e32=ViTB16_laion400m_e32
+        self.pargs.RN50_yffcc15m=RN50_yffcc15m
+        self.pargs.RN50_cc12m=RN50_cc12m
+        self.pargs.RN50_quickgelu_yfcc15m=RN50_quickgelu_yfcc15m
+        self.pargs.RN50_quickgelu_cc12m=RN50_quickgelu_cc12m
+        self.pargs.RN101_yfcc15m=RN101_yfcc15m
+        self.pargs.RN101_quickgelu_yfcc15m=RN101_quickgelu_yfcc15m
         self.pargs.diffusion_model = diffusion_model
         self.pargs.use_secondary_model = use_secondary_model
         self.pargs.diffusion_sampling_mode = diffusion_sampling_mode
