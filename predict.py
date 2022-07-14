@@ -26,10 +26,10 @@ class Predictor(BasePredictor):
 
     def predict(
         self,
-        steps: int = Input(description="Number of steps", default=100),
+        steps: int = Input(description="Number of steps, higher numbers will give more refined output but will take longer", default=100),
         prompt: str = Input(description="Text Prompt", default="A beautiful painting of a singular lighthouse, shining its light across a tumultuous sea of blood by greg rutkowski and thomas kinkade, Trending on artstation."),
-        width: int = Input(description="Width", default=1280),
-        height: int = Input(description="Height", default=768),
+        width: int = Input(description="Width of the output image, higher numbers will take longer", default=1280),
+        height: int = Input(description="Height of the output image, higher numbers will take longer", default=768),
         diffusion_model: str = Input(description="Diffusion Model", default = "512x512_diffusion_uncond_finetune_008100", choices=[
             "512x512_diffusion_uncond_finetune_008100",
             "256x256_diffusion_uncond",
@@ -77,9 +77,9 @@ class Predictor(BasePredictor):
         sat_scale: int = Input(description="Saturation Scale", default=0),
         cutn_batches: int = Input(description="Cut Batches", default=4),
         skip_augs: bool = Input(description="Skip Augmentations", default=False),
-        init_image: Path = Input(description="Init Image", default=None),
-        target_image: Path = Input(description="Target Image", default=None),
-        init_scale: int = Input(description="Init Scale", default=1000),
+        init_image: Path = Input(description="Initial image to start generation from", default=None),
+        target_image: Path = Input(description="Target image to generate towards, similarly to the text prompt", default=None),
+        init_scale: int = Input(description="Initial Scale", default=1000),
         target_scale: int = Input(description="Target Scale", default=20000),
         skip_steps: int = Input(description="Skip Steps", default=10),        
         display_rate: int = Input(description="Steps between outputs, lower numbers may slow down generation.", default=20),
