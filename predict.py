@@ -130,6 +130,7 @@ class Predictor(BasePredictor):
         if (seed):
             self.pargs.set_seed = seed
 
+        self.exception = None
         id = str(uuid.uuid4())
         self.pargs.uuid = id                          
         self.pargs.n_batches = 1
@@ -150,7 +151,19 @@ class Predictor(BasePredictor):
                 yield Path(image)
             except: {}
 
-        yield Path(glob.glob(f'{self.folders.batch_folder}/*.png')[0])
-        
+        if self.exception:
+            print('Worked exited with exception!')
+            raise self.exception
+
+        output_files = glob.glob(f'{self.folders.batch_folder}/*.png')
+        if not output_files:
+            raise RuntimeError('No output file, check logs for errors')
+
+        yield Path(output_files[0])
+
     def worker(self):
-        dd.start_run(pargs=self.pargs, folders=self.folders, device=self.device)
+        try:
+            dd.start_run(pargs=self.pargs, folders=self.folders, device=self.device)
+        except Exception as e:
+            self.exception = e
+            
