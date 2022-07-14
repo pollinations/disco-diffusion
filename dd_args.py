@@ -104,6 +104,19 @@ def parse(a=None):
     parser.add_argument("--RN50x16", help="Use RN50x16 model", type=str2bool, default=gp("RN50x16", False))
     parser.add_argument("--RN50x64", help="Use RN50x64 model", type=str2bool, default=gp("RN50x64", False))
     parser.add_argument("--RN101", help="Use RN101 model", type=str2bool, default=gp("RN101", False))
+    parser.add_argument("--ViTB32_laion2b_e16", help="Use ViTB32_laion2b_e16 model", type=str2bool, default=gp("ViTB32_laion2b_e16", False))
+    parser.add_argument("--ViTB32_laion400m_e31", help="Use ViTB32_laion400m_e31 model", type=str2bool, default=gp("ViTB32_laion400m_e31", False))
+    parser.add_argument("--ViTB32_laion400m_e32", help="Use ViTB32_laion400m_e32 model", type=str2bool, default=gp("ViTB32_laion400m_e32", False))
+    parser.add_argument("--ViTB32quickgelu_laion400m_e31", help="Use ViTB32quickgelu_laion400m_e31 model", type=str2bool, default=gp("ViTB32quickgelu_laion400m_e31", False))
+    parser.add_argument("--ViTB32quickgelu_laion400m_e32", help="Use ViTB32quickgelu_laion400m_e32 model", type=str2bool, default=gp("ViTB32quickgelu_laion400m_e32", False))
+    parser.add_argument("--ViTB16_laion400m_e31", help="Use ViTB16_laion400m_e31 model", type=str2bool, default=gp("ViTB16_laion400m_e31", False))
+    parser.add_argument("--ViTB16_laion400m_e32", help="Use ViTB16_laion400m_e32 model", type=str2bool, default=gp("ViTB16_laion400m_e32", False))
+    parser.add_argument("--RN50_yffcc15m", help="Use RN50_yffcc15m model", type=str2bool, default=gp("RN50_yffcc15m", False))
+    parser.add_argument("--RN50_cc12m", help="Use RN50_cc12m model", type=str2bool, default=gp("RN50_cc12m", False))
+    parser.add_argument("--RN50_quickgelu_yfcc15m", help="Use RN50_quickgelu_yfcc15m model", type=str2bool, default=gp("RN50_quickgelu_yfcc15m", False))
+    parser.add_argument("--RN50_quickgelu_cc12m", help="Use RN50_quickgelu_cc12m model", type=str2bool, default=gp("RN50_quickgelu_cc12m", False))
+    parser.add_argument("--RN101_yfcc15m", help="Use RN101_yfcc15m model", type=str2bool, default=gp("RN101_yfcc15m", False))
+    parser.add_argument("--RN101_quickgelu_yfcc15m", help="Use RN101_quickgelu_yfcc15m model", type=str2bool, default=gp("RN101_quickgelu_yfcc15m", False))
     parser.add_argument(
         "--diffusion_model",
         help="Diffusion Model",
@@ -113,9 +126,16 @@ def parse(a=None):
             "256x256_diffusion_uncond",
             "pixel_art_diffusion_hard_256",
             "pixel_art_diffusion_soft_256",
+            "pixelartdiffusion_expanded",
+            "pixelartdiffusion4k",
+            "PADexpanded",
+            "watercolordiffusion",
+            "watercolordiffusion_2",
+            "PulpSciFiDiffusion",
             "256x256_openai_comics_faces_by_alex_spirin_084000",
             "lsun_uncond_100M_1200K_bs128",
-            # "vit_b_16_plus_240-laion400m_e31-8fb26589",
+            "ukiyoe_diffusion_256_022000.pt",
+            "liminal_diffusion",
         ],
     )
     parser.add_argument("--use_secondary_model", help="Use RN101 model", type=str2bool, default=gp("use_secondary_model", True))
@@ -182,6 +202,8 @@ def parse(a=None):
     parser.add_argument("--cut_overview", help="Cut Overview", default=gp("cut_overview", "[12]*400+[4]*600"), required=False)
     parser.add_argument("--cut_innercut", help="Cut Innercut", default=gp("cut_innercut", "[4]*400+[12]*600"), required=False)
     parser.add_argument("--cut_icgray_p", help="Cut IC Gray Power", default=gp("cut_icgray_p", "[0.2]*400+[0]*600"), required=False)
+    # TODO: Check for regressions
+    # parser.add_argument("--cut_ic_pow", help="Cut IC Power", default=gp("cut_ic_pow", "[1]*1000"), required=False)
     parser.add_argument("--cut_ic_pow", help="Cut IC Power", type=int, default=gp("cut_ic_pow", 1), required=False)
     parser.add_argument("--resume_run", help="Resume Run", type=str2bool, default=gp("resume_run", False), required=False)
     parser.add_argument("--run_to_resume", help="Run to Resume", default=gp("run_to_resume", "latest"), required=False)
@@ -189,12 +211,18 @@ def parse(a=None):
     parser.add_argument("--retain_overwritten_frames", help="Retain Overwritten Frames", type=str2bool, default=gp("retain_overwritten_frames", False), required=False)
     parser.add_argument("--skip_video_for_run_all", help="Skip Video Creation", type=str2bool, default=gp("skip_video_for_run_all", False), required=False)
     parser.add_argument("--check_model_SHA", help="Check Model Hash", type=str2bool, default=gp("check_model_SHA", False), required=False)
-    parser.add_argument("--symmetry_loss", help="Symmetry Loss", type=str2bool, default=gp("symmetry_loss", False), required=False)
-    parser.add_argument("--symmetry_loss_scale", help="Symmetry Loss Scale", type=int, default=gp("symmetry_loss_scale", 1500), required=False)
-    parser.add_argument("--symmetry_switch", help="Symmetry Switch", type=int, default=gp("symmetry_switch", 40), required=False)
-    parser.add_argument("--v_symmetry_loss", help="Vertical Symmetry Loss", type=str2bool, default=gp("v_symmetry_loss", False), required=False)
-    parser.add_argument("--v_symmetry_loss_scale", help="Vertical Symmetry Loss Scale", type=int, default=gp("v_symmetry_loss_scale", 1500), required=False)
-    parser.add_argument("--v_symmetry_switch", help="Vertical Symmetry Switch", type=int, default=gp("v_symmetry_switch", 40), required=False)
+    # Deprecated Symmetry args
+    # parser.add_argument("--symmetry_loss", help="(Deprecated) Symmetry Loss", type=str2bool, default=gp("symmetry_loss", False), required=False)
+    # parser.add_argument("--symmetry_loss_scale", help="(Deprecated) Symmetry Loss Scale", type=int, default=gp("symmetry_loss_scale", 1500), required=False)
+    # parser.add_argument("--symmetry_switch", help="(Deprecated) Symmetry Switch", type=int, default=gp("symmetry_switch", 40), required=False)
+    # parser.add_argument("--v_symmetry_loss", help="(Deprecated) Vertical Symmetry Loss", type=str2bool, default=gp("v_symmetry_loss", False), required=False)
+    # parser.add_argument("--v_symmetry_loss_scale", help="(Deprecated) Vertical Symmetry Loss Scale", type=int, default=gp("v_symmetry_loss_scale", 1500), required=False)
+    # parser.add_argument("--v_symmetry_switch", help="(Deprecated) Vertical Symmetry Switch", type=int, default=gp("v_symmetry_switch", 40), required=False)
+    # New Symmetry args
+    parser.add_argument("--use_vertical_symmetry", help="Use Vertical Symmetry", type=str2bool, default=gp("use_vertical_symmetry", False), required=False)
+    parser.add_argument("--use_horizontal_symmetry", help="Use Horizontal Symmetry", type=str2bool, default=gp("use_horizontal_symmetry", False), required=False)
+    parser.add_argument("--transformation_percent", type=str2json, help="Symmetry Transformation Percent", default=gp("transformation_percent", "[0.09]"), required=False)
+    # Twilio SMS args
     parser.add_argument("--twilio_account_sid", help="Twilio Account SID", type=int, default=gp("twilio_account_sid", None), required=False)
     parser.add_argument("--twilio_auth_token", help="Twilio Auth Token", type=int, default=gp("twilio_auth_token", None), required=False)
     parser.add_argument("--twilio_to", help="Twilio SMS recipient", type=int, default=gp("twilio_to", None), required=False)

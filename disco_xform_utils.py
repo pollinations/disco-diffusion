@@ -44,7 +44,7 @@ def transform_image_3d(
         predictions using nyu dataset
         """
         logger.debug("Running AdaBins depth estimation implementation...")
-        infer_helper = InferenceHelper(pretrained_path_base="models", dataset="nyu")
+        infer_helper = InferenceHelper(pretrained_path_base="models", dataset="nyu", device=device)
 
         image_pil_area = w * h
         if image_pil_area > MAX_ADABINS_AREA:
