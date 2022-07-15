@@ -59,7 +59,11 @@ import voronoi_utils
 
 # import pytorch3dlite.pytorch3dlite as p3d
 
-from pytorch3d import transforms
+try:
+    from pytorch3d import transforms
+except:
+    logger.warning("Pytorch 3D not present.  Animations will not work.")
+
 
 from clip import clip
 import open_clip
