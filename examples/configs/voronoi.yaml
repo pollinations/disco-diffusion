@@ -1,0 +1,15 @@
+# Voronoi Example
+batch_name: voronoi
+ViTL14_336: true
+init_generator: voronoi
+voronoi_points: 100
+voronoi_palette_embed:
+  mode: static
+  palette:
+  - 0xFDA4BAFF
+  - 0xFCBACBFF
+  - 0xF26B8AFF
+set_seed: 54322
+n_batches: 10
+steps: 200
+skip_steps: 75
