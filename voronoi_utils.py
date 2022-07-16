@@ -42,12 +42,14 @@ def draw_map(colormap, palette, write_file=False):
     return image
 
 
-def render(width=1280, height=768, num_points=20, palette_config=None):
+def render(width=1280, height=768, num_points=20, palette_config=None, voronoi_palette_embed=None):
     points = []
     palette = numpy.array([0xFFFFFFFF])
     if palette_config is not None:
         with open(palette_config, "r") as conf:
             c = pydot(full_load(conf))
+    if voronoi_palette_embed is not None:
+        c = pydot(voronoi_palette_embed)
     else:
         c = pydot({"mode": "static", "palette": [0x00000000]})
     for i in range(num_points):
