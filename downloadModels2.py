@@ -88,7 +88,7 @@ def loadModels2(folders=pydot({"model_path": "models"})):
         {
             "file": f"{folders.model_path}/vit_b_16-laion400m_e32-55e67d44.pt",
             "hash": "55e67d44b44d9e39aaf299a5c616aaf10a655879d6bd5854027b4a254aa2e7d5",
-            "sources": [{"url": "wget https://github.com/mlfoundations/open_clip/releases/download/v0.2-weights/vit_b_16-laion400m_e32-55e67d44.pt"}],
+            "sources": [{"url": "https://github.com/mlfoundations/open_clip/releases/download/v0.2-weights/vit_b_16-laion400m_e32-55e67d44.pt"}],
         },
         {
             "file": f"{folders.model_path}/vit_b_16_plus_240-laion400m_e31-8fb26589.pt",

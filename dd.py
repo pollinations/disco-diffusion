@@ -59,7 +59,11 @@ import voronoi_utils
 
 # import pytorch3dlite.pytorch3dlite as p3d
 
-from pytorch3d import transforms
+try:
+    from pytorch3d import transforms
+except:
+    logger.warning("Pytorch 3D not present.  Animations will not work.")
+
 
 from clip import clip
 import open_clip
@@ -1773,7 +1777,7 @@ def disco(args, folders, frame_num, clip_models, init_scale, skip_steps, seconda
             paletteFile = None
             if args.voronoi_palette not in [None, "None", "none", "NONE", ""]:
                 paletteFile = f"{folders.root_path}/palettes/{args.voronoi_palette}"
-            init = voronoi_utils.render(width=args.side_x, height=args.side_y, num_points=args.voronoi_points, palette_config=paletteFile).convert("RGB")
+            init = voronoi_utils.render(width=args.side_x, height=args.side_y, num_points=args.voronoi_points, palette_config=paletteFile, voronoi_palette_embed=args.voronoi_palette_embed).convert("RGB")
             init = init.resize((args.side_x, args.side_y), resample=Image.LANCZOS)
             init = TF.to_tensor(init).to(device).unsqueeze(0).mul(2).sub(1)
         if args.init_generator == "perlin":
@@ -2546,6 +2550,7 @@ def processBatch(pargs=None, folders=None, device=None, is_colab=False, session_
         "init_generator": pargs.init_generator,
         "voronoi_points": pargs.voronoi_points,
         "voronoi_palette": pargs.voronoi_palette,
+        "voronoi_palette_embed": pargs.voronoi_palette_embed,
         "dd_bot": pargs.dd_bot,
         "dd_bot_url": pargs.dd_bot_url,
         "dd_bot_agentname": pargs.dd_bot_agentname,
