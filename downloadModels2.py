@@ -50,66 +50,66 @@ def loadModels2(folders=pydot({"model_path": "models"})):
             "hash": "2eb25fb3a13a92df27cb69046a518901dcd5b1eff3ffe5d2575a35ee75b4da9f",
             "sources": [{"url": "https://huggingface.co/BrainArtLabs/liminal_diffusion/resolve/main/liminal_diffusion.pt"}],
         },
-        {
-            "file": f"{folders.model_path}/rn50-quickgelu-yfcc15m-455df137.pt",
-            "hash": "455df13750cec2d6bb5e578fa84fb59a63d40e9fdbae58e7e7155672e46dc578",
-            "sources": [{"url": "https://github.com/mlfoundations/open_clip/releases/download/v0.2-weights/rn50-quickgelu-yfcc15m-455df137.pt"}],
-        },
-        {
-            "file": f"{folders.model_path}/rn50-quickgelu-cc12m-f000538c.pt",
-            "hash": "f000538c6c3c33c07e4fad5619f1b3d4cd591864dd3143778896112d1bf4fa7d",
-            "sources": [{"url": "https://github.com/mlfoundations/open_clip/releases/download/v0.2-weights/rn50-quickgelu-cc12m-f000538c.pt"}],
-        },
-        {
-            "file": f"{folders.model_path}/rn101-quickgelu-yfcc15m-3e04b30e.pt",
-            "hash": "3e04b30eb7070e69b78db2c33f12a48cfa1f697691ed198d61fb2abbb48db5a3",
-            "sources": [{"url": "https://github.com/mlfoundations/open_clip/releases/download/v0.2-weights/rn101-quickgelu-yfcc15m-3e04b30e.pt"}],
-        },
-        {
-            "file": f"{folders.model_path}/vit_b_32-laion2b_e16-af8dbd0c.pth",
-            "hash": "af8dbd0c4bf1654db018a2a70fd839c3a6e79d2fdac33303f06d0d8aae16a65c",
-            "sources": [{"url": "https://github.com/mlfoundations/open_clip/releases/download/v0.2-weights/vit_b_32-laion2b_e16-af8dbd0c.pth"}],
-        },
-        {
-            "file": f"{folders.model_path}/vit_b_32-quickgelu-laion400m_e31-d867053b.pt",
-            "hash": "d867053b2301634007ed9af230bfb1a217ec634f6c0329f04092133ae5c4b89e",
-            "sources": [{"url": "https://github.com/mlfoundations/open_clip/releases/download/v0.2-weights/vit_b_32-quickgelu-laion400m_e31-d867053b.pt"}],
-        },
-        {
-            "file": f"{folders.model_path}/vit_b_32-quickgelu-laion400m_e32-46683a32.pt",
-            "hash": "46683a32721d5c68911153698992361285d20ca690bb4f317c11e45c03d798fa",
-            "sources": [{"url": "https://github.com/mlfoundations/open_clip/releases/download/v0.2-weights/vit_b_32-quickgelu-laion400m_e32-46683a32.pt"}],
-        },
-        {
-            "file": f"{folders.model_path}/vit_b_16-laion400m_e31-00efa78f.pt",
-            "hash": "00efa78fe761eb607926704cfee46a4305ce2bf63af6ab50f1eeba2ef71da988",
-            "sources": [{"url": "https://github.com/mlfoundations/open_clip/releases/download/v0.2-weights/vit_b_16-laion400m_e31-00efa78f.pt"}],
-        },
-        {
-            "file": f"{folders.model_path}/vit_b_16-laion400m_e32-55e67d44.pt",
-            "hash": "55e67d44b44d9e39aaf299a5c616aaf10a655879d6bd5854027b4a254aa2e7d5",
-            "sources": [{"url": "https://github.com/mlfoundations/open_clip/releases/download/v0.2-weights/vit_b_16-laion400m_e32-55e67d44.pt"}],
-        },
-        {
-            "file": f"{folders.model_path}/vit_b_16_plus_240-laion400m_e31-8fb26589.pt",
-            "hash": "8fb26589b9a8bab2e7a683d280e48df89b8e742f3a82132707282620b36facba",
-            "sources": [{"url": "https://github.com/mlfoundations/open_clip/releases/download/v0.2-weights/vit_b_16_plus_240-laion400m_e31-8fb26589.pt"}],
-        },
-        {
-            "file": f"{folders.model_path}/vit_b_16_plus_240-laion400m_e32-699c4b84.pt",
-            "hash": "699c4b843885d82733517f36f0911d7e1b360bcc1314dda81d8c56c76fe9524d",
-            "sources": [{"url": "https://github.com/mlfoundations/open_clip/releases/download/v0.2-weights/vit_b_16_plus_240-laion400m_e32-699c4b84.pt"}],
-        },
-        {
-            "file": f"{folders.model_path}/vit_l_14-laion400m_e31-69988bb6.pt",
-            "hash": "69988bb6afa2b63291087c61464b3138660b2861fea5ec4682e107d194d9aaa3",
-            "sources": [{"url": "https://github.com/mlfoundations/open_clip/releases/download/v0.2-weights/vit_l_14-laion400m_e31-69988bb6.pt"}],
-        },
-        {
-            "file": f"{folders.model_path}/vit_l_14-laion400m_e32-3d133497.pt",
-            "hash": "3d133497672c345f50dec98ebc674bb74c14b4f3aa0f3088f7cefe7e05a10a60",
-            "sources": [{"url": "https://github.com/mlfoundations/open_clip/releases/download/v0.2-weights/vit_l_14-laion400m_e32-3d133497.pt"}],
-        },
+        # {
+        #     "file": f"{folders.model_path}/rn50-quickgelu-yfcc15m-455df137.pt",
+        #     "hash": "455df13750cec2d6bb5e578fa84fb59a63d40e9fdbae58e7e7155672e46dc578",
+        #     "sources": [{"url": "https://github.com/mlfoundations/open_clip/releases/download/v0.2-weights/rn50-quickgelu-yfcc15m-455df137.pt"}],
+        # },
+        # {
+        #     "file": f"{folders.model_path}/rn50-quickgelu-cc12m-f000538c.pt",
+        #     "hash": "f000538c6c3c33c07e4fad5619f1b3d4cd591864dd3143778896112d1bf4fa7d",
+        #     "sources": [{"url": "https://github.com/mlfoundations/open_clip/releases/download/v0.2-weights/rn50-quickgelu-cc12m-f000538c.pt"}],
+        # },
+        # {
+        #     "file": f"{folders.model_path}/rn101-quickgelu-yfcc15m-3e04b30e.pt",
+        #     "hash": "3e04b30eb7070e69b78db2c33f12a48cfa1f697691ed198d61fb2abbb48db5a3",
+        #     "sources": [{"url": "https://github.com/mlfoundations/open_clip/releases/download/v0.2-weights/rn101-quickgelu-yfcc15m-3e04b30e.pt"}],
+        # },
+        # {
+        #     "file": f"{folders.model_path}/vit_b_32-laion2b_e16-af8dbd0c.pth",
+        #     "hash": "af8dbd0c4bf1654db018a2a70fd839c3a6e79d2fdac33303f06d0d8aae16a65c",
+        #     "sources": [{"url": "https://github.com/mlfoundations/open_clip/releases/download/v0.2-weights/vit_b_32-laion2b_e16-af8dbd0c.pth"}],
+        # },
+        # {
+        #     "file": f"{folders.model_path}/vit_b_32-quickgelu-laion400m_e31-d867053b.pt",
+        #     "hash": "d867053b2301634007ed9af230bfb1a217ec634f6c0329f04092133ae5c4b89e",
+        #     "sources": [{"url": "https://github.com/mlfoundations/open_clip/releases/download/v0.2-weights/vit_b_32-quickgelu-laion400m_e31-d867053b.pt"}],
+        # },
+        # {
+        #     "file": f"{folders.model_path}/vit_b_32-quickgelu-laion400m_e32-46683a32.pt",
+        #     "hash": "46683a32721d5c68911153698992361285d20ca690bb4f317c11e45c03d798fa",
+        #     "sources": [{"url": "https://github.com/mlfoundations/open_clip/releases/download/v0.2-weights/vit_b_32-quickgelu-laion400m_e32-46683a32.pt"}],
+        # },
+        # {
+        #     "file": f"{folders.model_path}/vit_b_16-laion400m_e31-00efa78f.pt",
+        #     "hash": "00efa78fe761eb607926704cfee46a4305ce2bf63af6ab50f1eeba2ef71da988",
+        #     "sources": [{"url": "https://github.com/mlfoundations/open_clip/releases/download/v0.2-weights/vit_b_16-laion400m_e31-00efa78f.pt"}],
+        # },
+        # {
+        #     "file": f"{folders.model_path}/vit_b_16-laion400m_e32-55e67d44.pt",
+        #     "hash": "55e67d44b44d9e39aaf299a5c616aaf10a655879d6bd5854027b4a254aa2e7d5",
+        #     "sources": [{"url": "https://github.com/mlfoundations/open_clip/releases/download/v0.2-weights/vit_b_16-laion400m_e32-55e67d44.pt"}],
+        # },
+        # {
+        #     "file": f"{folders.model_path}/vit_b_16_plus_240-laion400m_e31-8fb26589.pt",
+        #     "hash": "8fb26589b9a8bab2e7a683d280e48df89b8e742f3a82132707282620b36facba",
+        #     "sources": [{"url": "https://github.com/mlfoundations/open_clip/releases/download/v0.2-weights/vit_b_16_plus_240-laion400m_e31-8fb26589.pt"}],
+        # },
+        # {
+        #     "file": f"{folders.model_path}/vit_b_16_plus_240-laion400m_e32-699c4b84.pt",
+        #     "hash": "699c4b843885d82733517f36f0911d7e1b360bcc1314dda81d8c56c76fe9524d",
+        #     "sources": [{"url": "https://github.com/mlfoundations/open_clip/releases/download/v0.2-weights/vit_b_16_plus_240-laion400m_e32-699c4b84.pt"}],
+        # },
+        # {
+        #     "file": f"{folders.model_path}/vit_l_14-laion400m_e31-69988bb6.pt",
+        #     "hash": "69988bb6afa2b63291087c61464b3138660b2861fea5ec4682e107d194d9aaa3",
+        #     "sources": [{"url": "https://github.com/mlfoundations/open_clip/releases/download/v0.2-weights/vit_l_14-laion400m_e31-69988bb6.pt"}],
+        # },
+        # {
+        #     "file": f"{folders.model_path}/vit_l_14-laion400m_e32-3d133497.pt",
+        #     "hash": "3d133497672c345f50dec98ebc674bb74c14b4f3aa0f3088f7cefe7e05a10a60",
+        #     "sources": [{"url": "https://github.com/mlfoundations/open_clip/releases/download/v0.2-weights/vit_l_14-laion400m_e32-3d133497.pt"}],
+        # },
     ]
 
     modelProgress = widgets.IntProgress(
