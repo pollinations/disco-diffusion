@@ -26,8 +26,8 @@ class Predictor(BasePredictor):
 
     def predict(
         self,
-        steps: int = Input(description="Number of steps, higher numbers will give more refined output but will take longer", default=100),
         prompt: str = Input(description="Text Prompt", default="A beautiful painting of a singular lighthouse, shining its light across a tumultuous sea of blood by greg rutkowski and thomas kinkade, Trending on artstation."),
+        steps: int = Input(description="Number of steps, higher numbers will give more refined output but will take longer", default=100),
         width: int = Input(description="Width of the output image, higher numbers will take longer", default=1280),
         height: int = Input(description="Height of the output image, higher numbers will take longer", default=768),
         diffusion_model: str = Input(description="Diffusion Model", default = "512x512_diffusion_uncond_finetune_008100", choices=[
@@ -47,29 +47,6 @@ class Predictor(BasePredictor):
             "liminal_diffusion",
         ]),
         diffusion_sampling_mode: str = Input(description="Diffusion Sampling Mode", default="ddim", choices=["plms", "ddim"]),
-        ViTB32: bool = Input(description="Use ViTB32 model", default=True),
-        ViTB16: bool = Input(description="Use ViTB16 model", default=True),
-        ViTL14: bool = Input(description="Use ViTB14 model", default=False),
-        ViTL14_336: bool = Input(description="Use ViTL14_336 model", default=False),
-        RN50: bool = Input(description="Use RN50 model", default=True),
-        RN50x4: bool = Input(description="Use RN50x4 model", default=False),
-        RN50x16: bool = Input(description="Use RN50x16 model", default=False),
-        RN50x64: bool = Input(description="Use RN50x64 model", default=False),
-        RN50x101: bool = Input(description="Use RN50x101 model", default=False),
-        RN101: bool = Input(description="Use RN101 model", default=False),
-        ViTB32_laion2b_e16: bool = Input(description="Use ViTB32_laion2b_e16 model", default=False),
-        ViTB32_laion400m_e31: bool = Input(description="Use ViTB32_laion400m_e31 model", default=False),
-        ViTB32_laion400m_e32: bool = Input(description="Use ViTB32_laion400m_e32 model", default=False),
-        ViTB32quickgelu_laion400m_e31: bool = Input(description="Use ViTB32quickgelu_laion400m_e31 model", default=False),
-        ViTB32quickgelu_laion400m_e32: bool = Input(description="Use ViTB32quickgelu_laion400m_e32 model", default=False),
-        ViTB16_laion400m_e31:bool = Input(description="Use ViTB16_laion400m_e31 model", default=False),
-        ViTB16_laion400m_e32:bool = Input(description="Use ViTB16_laion400m_e32 model", default=False),
-        RN50_yffcc15m:bool = Input(description="Use RN50_yffcc15m model", default=False),
-        RN50_cc12m:bool = Input(description="Use RN50_cc12m model", default=False),
-        RN50_quickgelu_yfcc15m:bool = Input(description="Use RN50_quickgelu_yfcc15m model", default=False),
-        RN50_quickgelu_cc12m:bool = Input(description="Use RN50_quickgelu_cc12m model", default=False),
-        RN101_yfcc15m:bool = Input(description="Use RN101_yfcc15m model", default=False),
-        RN101_quickgelu_yfcc15m:bool = Input(description="Use RN101_quickgelu_yfcc15m model", default=False),
         use_secondary_model: bool = Input(description="Use secondary model", default=True),        
         clip_guidance_scale: int = Input(description="CLIP Guidance Scale", default=5000),
         tv_scale: int = Input(description="TV Scale", default=0),
@@ -88,29 +65,52 @@ class Predictor(BasePredictor):
         """Run a single prediction on the model"""                
         self.pargs.steps = steps
         self.pargs.text_prompts= { 0: [ prompt ] }
-        self.pargs.ViTB32=ViTB32
-        self.pargs.ViTB16=ViTB16
-        self.pargs.ViTL14=ViTL14
-        self.pargs.ViTL14_336=ViTL14_336
-        self.pargs.RN50=RN50
-        self.pargs.RN50x4=RN50x4
-        self.pargs.RN50x16=RN50x16
-        self.pargs.RN50x64=RN50x64
-        self.pargs.RN50x101=RN50x101
-        self.pargs.RN101=RN101
-        self.pargs.ViTB32_laion2b_e16=ViTB32_laion2b_e16
-        self.pargs.ViTB32_laion400m_e31=ViTB32_laion400m_e31
-        self.pargs.ViTB32_laion400m_e32=ViTB32_laion400m_e32
-        self.pargs.ViTB32quickgelu_laion400m_e31=ViTB32quickgelu_laion400m_e31
-        self.pargs.ViTB32quickgelu_laion400m_e32=ViTB32quickgelu_laion400m_e32
-        self.pargs.ViTB16_laion400m_e31=ViTB16_laion400m_e31
-        self.pargs.ViTB16_laion400m_e32=ViTB16_laion400m_e32
-        self.pargs.RN50_yffcc15m=RN50_yffcc15m
-        self.pargs.RN50_cc12m=RN50_cc12m
-        self.pargs.RN50_quickgelu_yfcc15m=RN50_quickgelu_yfcc15m
-        self.pargs.RN50_quickgelu_cc12m=RN50_quickgelu_cc12m
-        self.pargs.RN101_yfcc15m=RN101_yfcc15m
-        self.pargs.RN101_quickgelu_yfcc15m=RN101_quickgelu_yfcc15m
+        # ViTB32: bool = Input(description="Use ViTB32 model", default=True),
+        # ViTB16: bool = Input(description="Use ViTB16 model", default=True),
+        # ViTL14: bool = Input(description="Use ViTB14 model", default=False),
+        # ViTL14_336: bool = Input(description="Use ViTL14_336 model", default=False),
+        # RN50: bool = Input(description="Use RN50 model", default=True),
+        # RN50x4: bool = Input(description="Use RN50x4 model", default=False),
+        # RN50x16: bool = Input(description="Use RN50x16 model", default=False),
+        # RN50x64: bool = Input(description="Use RN50x64 model", default=False),
+        # RN50x101: bool = Input(description="Use RN50x101 model", default=False),
+        # RN101: bool = Input(description="Use RN101 model", default=False),
+        # ViTB32_laion2b_e16: bool = Input(description="Use ViTB32_laion2b_e16 model", default=False),
+        # ViTB32_laion400m_e31: bool = Input(description="Use ViTB32_laion400m_e31 model", default=False),
+        # ViTB32_laion400m_e32: bool = Input(description="Use ViTB32_laion400m_e32 model", default=False),
+        # ViTB32quickgelu_laion400m_e31: bool = Input(description="Use ViTB32quickgelu_laion400m_e31 model", default=False),
+        # ViTB32quickgelu_laion400m_e32: bool = Input(description="Use ViTB32quickgelu_laion400m_e32 model", default=False),
+        # ViTB16_laion400m_e31:bool = Input(description="Use ViTB16_laion400m_e31 model", default=False),
+        # ViTB16_laion400m_e32:bool = Input(description="Use ViTB16_laion400m_e32 model", default=False),
+        # RN50_yffcc15m:bool = Input(description="Use RN50_yffcc15m model", default=False),
+        # RN50_cc12m:bool = Input(description="Use RN50_cc12m model", default=False),
+        # RN50_quickgelu_yfcc15m:bool = Input(description="Use RN50_quickgelu_yfcc15m model", default=False),
+        # RN50_quickgelu_cc12m:bool = Input(description="Use RN50_quickgelu_cc12m model", default=False),
+        # RN101_yfcc15m:bool = Input(description="Use RN101_yfcc15m model", default=False),
+        # RN101_quickgelu_yfcc15m:bool = Input(description="Use RN101_quickgelu_yfcc15m model", default=False),
+        self.pargs.ViTB32=True
+        self.pargs.ViTB16=True
+        self.pargs.ViTL14=False
+        self.pargs.ViTL14_336=False
+        self.pargs.RN50=True
+        self.pargs.RN50x4=False
+        self.pargs.RN50x16=False
+        self.pargs.RN50x64=False
+        self.pargs.RN50x101=False
+        self.pargs.RN101=False
+        self.pargs.ViTB32_laion2b_e16=False
+        self.pargs.ViTB32_laion400m_e31=False
+        self.pargs.ViTB32_laion400m_e32=False
+        self.pargs.ViTB32quickgelu_laion400m_e31=False
+        self.pargs.ViTB32quickgelu_laion400m_e32=False
+        self.pargs.ViTB16_laion400m_e31=False
+        self.pargs.ViTB16_laion400m_e32=False
+        self.pargs.RN50_yffcc15m=False
+        self.pargs.RN50_cc12m=False
+        self.pargs.RN50_quickgelu_yfcc15m=False
+        self.pargs.RN50_quickgelu_cc12m=False
+        self.pargs.RN101_yfcc15m=False
+        self.pargs.RN101_quickgelu_yfcc15m=False
         self.pargs.diffusion_model = diffusion_model
         self.pargs.use_secondary_model = use_secondary_model
         self.pargs.diffusion_sampling_mode = diffusion_sampling_mode
