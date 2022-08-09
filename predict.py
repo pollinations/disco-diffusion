@@ -148,6 +148,7 @@ class Predictor(BasePredictor):
         while t.is_alive():
             try:
                 image = output.get(block=True, timeout=5)
+                os.system(f'"cp -v '{image}' /outputs"')
                 yield Path(image)
             except: {}
 
