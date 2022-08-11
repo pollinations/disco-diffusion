@@ -28,8 +28,8 @@ class Predictor(BasePredictor):
         self,
         prompt: str = Input(description="Text Prompt", default="A beautiful painting of a singular lighthouse, shining its light across a tumultuous sea of blood by greg rutkowski and thomas kinkade, Trending on artstation."),
         steps: int = Input(description="Number of steps, higher numbers will give more refined output but will take longer", default=100),
-        width: int = Input(description="Width of the output image, higher numbers will take longer", default=1280),
-        height: int = Input(description="Height of the output image, higher numbers will take longer", default=768),
+        width: int = Input(description="Width of the output image, higher numbers will take longer", default=640),
+        height: int = Input(description="Height of the output image, higher numbers will take longer", default=384),
         diffusion_model: str = Input(description="Diffusion Model", default = "512x512_diffusion_uncond_finetune_008100", choices=[
             "512x512_diffusion_uncond_finetune_008100",
             "256x256_diffusion_uncond",
