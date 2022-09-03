@@ -1,18 +1,24 @@
 # Prediction interface for Cog ⚙️
 # https://github.com/replicate/cog/blob/main/docs/python.md
 
+import glob
+import os
+import queue
+import sys
+import tempfile
+import threading
+import uuid
 from email.policy import default
+from typing import Iterator, List
 
 from cog import BasePredictor, Input, Path
 from pydotted import pydot
-from typing import List, Iterator
-import os,sys,tempfile,glob
-import queue, threading, uuid
 
 PROJECT_DIR = os.path.abspath(os.getcwd())
 
 sys.path.append(PROJECT_DIR)
-import dd, dd_args
+import dd
+import dd_args
 
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
@@ -27,9 +33,9 @@ class Predictor(BasePredictor):
     def predict(
         self,
         prompt: str = Input(description="Text Prompt", default="A beautiful painting of a singular lighthouse, shining its light across a tumultuous sea of blood by greg rutkowski and thomas kinkade, Trending on artstation."),
-        steps: int = Input(description="Number of steps, higher numbers will give more refined output but will take longer", default=100),
-        width: int = Input(description="Width of the output image, higher numbers will take longer", default=640),
-        height: int = Input(description="Height of the output image, higher numbers will take longer", default=384),
+        steps: int = Input(description="Number of steps, higher numbers will give more refined output but will take longer. The maximum is 150.", default=100),
+        width: int = Input(description="Width of the output image, higher numbers will take longer. The maximum is 720", default=720),
+        height: int = Input(description="Height of the output image, higher numbers will take longer. The maximum is 720", default=512),
         diffusion_model: str = Input(description="Diffusion Model", default = "512x512_diffusion_uncond_finetune_008100", choices=[
             "512x512_diffusion_uncond_finetune_008100",
             "256x256_diffusion_uncond",
@@ -62,7 +68,11 @@ class Predictor(BasePredictor):
         display_rate: int = Input(description="Steps between outputs, lower numbers may slow down generation.", default=20),
         seed: int = Input(description="Seed (leave empty to use a random seed)", default=None, le=(2**32-1), ge=0),
     ) -> Iterator[Path]:
-        """Run a single prediction on the model"""                
+        """Run a single prediction on the model"""  
+        width = min(width, 720)
+        height = min(height, 720)
+        steps = min(steps, 150)
+
         self.pargs.steps = steps
         self.pargs.text_prompts= { 0: [ prompt ] }
         # ViTB32: bool = Input(description="Use ViTB32 model", default=True),
